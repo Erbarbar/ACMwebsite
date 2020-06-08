@@ -26,6 +26,7 @@ class Pagina(models.Model):
 class Post(models.Model):
     titulo = models.CharField(max_length=500)
     texto = models.TextField()
+    imagem = models.ImageField(upload_to="posts")
     pagina = models.ForeignKey(
         'Pagina',
         on_delete=models.SET_NULL,

@@ -14,7 +14,7 @@ ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev openssl-dev
+    && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev openssl-dev jpeg-dev zlib-dev
 
 
 # install dependencies
@@ -45,7 +45,7 @@ RUN mkdir $APP_HOME/mediafiles
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apk update && apk add libpq postgresql-dev gcc python3-dev musl-dev libffi-dev openssl-dev
+RUN apk update && apk add libpq postgresql-dev gcc python3-dev musl-dev libffi-dev openssl-dev  jpeg-dev zlib-dev
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
