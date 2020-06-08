@@ -3,7 +3,7 @@ version: "3.7"
 services:
   django:
     build: ./app
-    command: gunicorn podium.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn acm.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/mediafiles
@@ -27,21 +27,11 @@ services:
     volumes:
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/mediafiles
-      - ./config/nginx:/etc/nginx/conf.d
-      - ./config/certbot/conf:/etc/letsencrypt
-      - ./config/certbot/www:/var/www/certbot
+      - ./config/nginx-dev:/etc/nginx/conf.d
     ports:
       - 80:80
-      - 443:443
     depends_on:
       - django
-
-  certbot:
-    image: certbot/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    volumes:
-      - ./config/certbot/conf:/etc/letsencrypt
-      - ./config/certbot/www:/var/www/certbot
 
 volumes:
   postgres_data:

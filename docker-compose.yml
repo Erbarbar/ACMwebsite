@@ -3,7 +3,10 @@ version: "3.7"
 services:
   django:
     build: ./app
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn acm.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
     ports:
       - 8000:8000
     env_file:
@@ -18,5 +21,19 @@ services:
     env_file:
       - ./config/env/.env.dev.db
 
+  nginx:
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    image: nginx:1.15-alpine
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
+      - ./config/nginx-dev:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    depends_on:
+      - django
+
 volumes:
   postgres_data_dev:
+  static_volume:
+  media_volume:

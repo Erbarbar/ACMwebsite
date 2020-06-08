@@ -53,11 +53,11 @@ RUN pip install --no-cache /wheels/*
 
 # copy entrypoint.sh
 COPY ./entrypoint.sh $APP_HOME
+RUN chmod +x ${APP_HOME}/entrypoint.sh
 
 # copy project
-COPY ./judo $APP_HOME/judo
-COPY ./sorteio $APP_HOME/sorteio
-COPY ./podium $APP_HOME/podium
+COPY ./acm $APP_HOME/acm
+COPY ./website $APP_HOME/website
 COPY ./manage.py $APP_HOME
 
 # chown all the files to the app user
